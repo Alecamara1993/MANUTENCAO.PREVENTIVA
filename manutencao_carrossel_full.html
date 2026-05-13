@@ -1,0 +1,629 @@
+
+<!DOCTYPE html>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0f1117;--bg2:#171a23;--bg3:#1e2130;--bg4:#252840;
+  --blue:#4f8ef7;--blue2:#2d6fe0;--green:#34d399;--amber:#fbbf24;--red:#f87171;--pink:#f472b6;
+  --text:#f0f2ff;--text2:#9da8c7;--text3:#5a6380;
+  --border:#2a2f45;--border2:#353c58;
+  --r:10px;--r2:14px;--r3:20px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;overflow-x:hidden}
+.app{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+
+/* LOGIN */
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;gap:24px}
+.login-logo{text-align:center}
+.login-logo .icon-wrap{width:72px;height:72px;background:linear-gradient(135deg,var(--blue2),var(--blue));border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:32px}
+.login-logo h1{font-size:22px;font-weight:600;color:var(--text)}
+.login-logo p{font-size:13px;color:var(--text2);margin-top:4px}
+.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px;width:100%;max-width:340px}
+.login-title{font-size:15px;font-weight:600;margin-bottom:16px;color:var(--text)}
+.user-btn{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);cursor:pointer;width:100%;margin-bottom:8px;transition:all .2s}
+.user-btn:hover{border-color:var(--blue);background:var(--bg4)}
+.user-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0}
+.user-info .name{font-size:14px;font-weight:500;color:var(--text);text-align:left}
+.user-info .role{font-size:11px;color:var(--text2);text-align:left}
+.or-divider{text-align:center;font-size:12px;color:var(--text3);margin:12px 0}
+.new-user-row{display:flex;gap:8px}
+.inp{flex:1;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.inp:focus{border-color:var(--blue)}
+.inp::placeholder{color:var(--text3)}
+.btn{padding:10px 16px;border-radius:var(--r);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue2)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
+.btn-sm{padding:7px 12px;font-size:12px}
+.btn-danger{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.btn-success{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.btn-full{width:100%;justify-content:center}
+
+/* HEADER */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 16px 0;flex-shrink:0}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hdr-logo{font-size:15px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+.hdr-logo .dot{width:8px;height:8px;background:var(--blue);border-radius:50%}
+.hdr-user{display:flex;align-items:center;gap:8px}
+.hdr-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer}
+.hdr-notif{position:relative;cursor:pointer;color:var(--text2);font-size:18px;display:flex;align-items:center}
+.notif-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;background:var(--red);border-radius:50%;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid var(--bg2)}
+.nav{display:flex}
+.nav-btn{flex:1;padding:8px 4px 10px;font-size:10px;font-weight:500;background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;color:var(--text3);display:flex;flex-direction:column;align-items:center;gap:3px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.nav-btn i{font-size:18px}
+.nav-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+
+/* CONTENT */
+.content{flex:1;padding:12px;overflow-y:auto;padding-bottom:80px}
+.section-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:0 0 8px}
+
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px;margin-bottom:10px}
+.card-hdr{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px}
+.card-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap;flex-shrink:0}
+.b-prev{background:rgba(79,142,247,.15);color:#93bbfc;border:1px solid rgba(79,142,247,.3)}
+.b-open{background:rgba(248,113,113,.15);color:#fca5a5;border:1px solid rgba(248,113,113,.3)}
+.b-prog{background:rgba(251,191,36,.15);color:#fcd34d;border:1px solid rgba(251,191,36,.3)}
+.b-done{background:rgba(52,211,153,.15);color:#6ee7b7;border:1px solid rgba(52,211,153,.3)}
+.b-mat{background:rgba(244,114,182,.15);color:#f9a8d4;border:1px solid rgba(244,114,182,.3)}
+.meta{font-size:11px;color:var(--text2);display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.meta i{font-size:13px;vertical-align:-2px;margin-right:3px}
+.obs-box{font-size:12px;color:var(--text2);background:var(--bg3);padding:8px 10px;border-radius:var(--r);border-left:3px solid var(--blue2);margin-top:6px;line-height:1.5}
+.mat-box{font-size:12px;color:#fca5a5;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:var(--r);padding:8px 10px;margin-top:6px;display:flex;gap:7px;align-items:flex-start}
+.btn-row{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.task-row{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s}
+.task-row:hover{border-color:var(--border2)}
+.chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.chk.done{background:var(--green);border-color:var(--green);color:#000}
+.task-info{flex:1;min-width:0}
+.task-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
+.task-name.done{text-decoration:line-through;color:var(--text3)}
+.task-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.day-block{margin-bottom:16px}
+.day-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.day-name{font-size:13px;font-weight:600;color:var(--text)}
+.day-today{color:var(--blue)}
+.day-prog{font-size:11px;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:10px;border:1px solid var(--border)}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:14px}
+.stat-lbl{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.stat-lbl i{font-size:14px}
+.stat-num{font-size:26px;font-weight:600;color:var(--text);font-family:'DM Mono',monospace}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bar-lbl{font-size:11px;color:var(--text2);width:120px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{flex:1;height:22px;background:var(--bg3);border-radius:5px;overflow:hidden;border:1px solid var(--border)}
+.bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:7px;font-size:10px;font-weight:600;color:#fff;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.bf-high{background:linear-gradient(90deg,#c0392b,var(--red))}
+.bf-mid{background:linear-gradient(90deg,#b7791f,var(--amber))}
+.bf-low{background:linear-gradient(90deg,var(--blue2),var(--blue))}
+.insight{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.25);border-radius:var(--r2);padding:12px;margin-bottom:12px}
+.insight-ttl{font-size:12px;font-weight:600;color:var(--blue);display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.insight-ttl i{font-size:15px}
+.insight-txt{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* NOTIFICAÇÕES */
+.notif-panel{position:absolute;top:0;right:0;left:0;bottom:0;background:var(--bg);z-index:50;display:none;flex-direction:column}
+.notif-panel.open{display:flex}
+.notif-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border)}
+.notif-hdr h2{font-size:16px;font-weight:600}
+.notif-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.notif-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.notif-body .ttl{font-size:13px;font-weight:500;color:var(--text)}
+.notif-body .sub{font-size:11px;color:var(--text3);margin-top:3px}
+.notif-unread{background:var(--bg3)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--bg2);border-radius:20px 20px 0 0;padding:20px 16px 28px;width:100%;max-width:420px;max-height:92vh;overflow-y:auto;border-top:1px solid var(--border)}
+.modal-ttl{font-size:15px;font-weight:600;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.form-grp{margin-bottom:13px}
+.form-lbl{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block}
+.form-inp{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border .2s}
+.form-inp:focus{border-color:var(--blue)}
+.form-sel{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none}
+.form-ta{width:100%;padding:10px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;resize:vertical;min-height:72px}
+
+/* FAB */
+.fab{position:fixed;bottom:20px;right:16px;width:54px;height:54px;border-radius:50%;background:var(--blue);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:26px;z-index:40;transition:all .2s;box-shadow:0 4px 20px rgba(79,142,247,.4)}
+.fab:hover{background:var(--blue2);transform:scale(1.05)}
+.hidden{display:none!important}
+
+/* REPORT */
+.report-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-top:10px;font-family:'DM Mono',monospace;font-size:12px;color:var(--text2);line-height:1.8;white-space:pre-wrap}
+.rpt-btn{width:100%;padding:13px;border-radius:var(--r2);border:1px solid var(--border);background:var(--bg2);font-size:13px;font-weight:500;cursor:pointer;color:var(--text);display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.rpt-btn:hover{border-color:var(--border2);background:var(--bg3)}
+.rpt-btn.blue{border-color:rgba(79,142,247,.4);color:var(--blue)}
+.rpt-btn.green{border-color:rgba(52,211,153,.3);color:var(--green)}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border2);border-radius:40px;padding:10px 18px;font-size:13px;font-weight:500;color:var(--text);z-index:200;display:flex;align-items:center;gap:7px;pointer-events:none;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+.empty{text-align:center;padding:40px 20px;color:var(--text3)}
+.empty i{font-size:40px;display:block;margin-bottom:10px;opacity:.3}
+.progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .4s}
+</style>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<div class="app" id="app"></div>
+<div class="fab hidden" id="fab"><i class="ti ti-plus"></i></div>
+<div id="modal-root"></div>
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toast-msg"></span></div>
+
+<script>
+const USERS=[
+  {id:'elias',name:'Elias',role:'Técnico de Manutenção',color:'#4f8ef7',initials:'ES'},
+  {id:'supervisor',name:'Supervisor',role:'Supervisão',color:'#34d399',initials:'SV'},
+  {id:'novo',name:'+',role:'Novo usuário',color:'#9da8c7',initials:'+'},
+];
+const DAYS=['Segunda','Terça','Quarta','Quinta','Sexta'];
+
+let S={
+  user:null,
+  tab:'preventivas',
+  preventivas:[
+    {id:1,dia:'Segunda',turno:'1º S',nome:'Vistoria do 10M – Sistema de Incêndio',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:2,dia:'Segunda',turno:'2º S',nome:'Braço do carrossel – Ajustes',done:true,obs:'Ajuste realizado no braço 3',doneBy:'Elias',doneAt:'13/05'},
+    {id:3,dia:'Segunda',turno:'3º S',nome:'Colocar produto na corrente industrial',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:4,dia:'Segunda',turno:'4º S',nome:'Tancagem – verificar vazetas e veículos',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:5,dia:'Terça',turno:'1º S',nome:'Braço do carrossel – Ajuste',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:6,dia:'Terça',turno:'2º S',nome:'Colocar produto na corrente do industrial',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:7,dia:'Terça',turno:'3º S',nome:'Apertar correntes das lanças',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:8,dia:'Terça',turno:'4º S',nome:'Braços do carrossel – Ajustes',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:9,dia:'Quarta',turno:'1º S',nome:'Verificar compressores',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:10,dia:'Quarta',turno:'2º S',nome:'Apertar todas as correntes das lanças',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:11,dia:'Quarta',turno:'3º S',nome:'Braços do carrossel – Ajustar, verificar e lubrificar',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:12,dia:'Quarta',turno:'4º S',nome:'Correntes em geral',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:13,dia:'Quinta',turno:'1º S',nome:'Mangueiras pneumáticas e vazamentos',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:14,dia:'Quinta',turno:'2º S',nome:'Vistoria pneumática – ver vazamentos',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:15,dia:'Quinta',turno:'3º S',nome:'Verificar compressores e geradores',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:16,dia:'Quinta',turno:'4º S',nome:'Vistoria pneumática – ver vazamentos',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:17,dia:'Sexta',turno:'1º S',nome:'Lubrificação e verificar correntes',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:18,dia:'Sexta',turno:'2º S',nome:'Lubrificar rodeiros do carrossel',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:19,dia:'Sexta',turno:'3º S',nome:'Lubrificação geral com graxa',done:false,obs:'',doneBy:'',doneAt:''},
+    {id:20,dia:'Sexta',turno:'4º S',nome:'Colocar produto na corrente do industrial',done:false,obs:'',doneBy:'',doneAt:''},
+  ],
+  corretivas:[
+    {id:101,equip:'Carrossel Linha 2',desc:'Mangueira pneumática rompida na estação 4',status:'aberto',inicio:'13/05/2025',fim:'',obs:'Aguardando chegada do material requisitado',mat:'2x mangueira pneumática 1/2" (cod. MNG-04)',resp:'Elias',reqNum:'REQ-045'},
+    {id:102,equip:'Compressor C1',desc:'Ruído excessivo no rolamento',status:'concluido',inicio:'10/05/2025',fim:'12/05/2025',obs:'Rolamento substituído com sucesso',mat:'',resp:'Elias',reqNum:''},
+    {id:103,equip:'Carrossel Linha 1',desc:'Corrente da lança desajustada – folga excessiva',status:'andamento',inicio:'12/05/2025',fim:'',obs:'Iniciado ajuste, falta tensionar seção 3',mat:'',resp:'Elias',reqNum:''},
+  ],
+  notificacoes:[
+    {id:1,tipo:'alert',titulo:'Preventiva pendente',sub:'Vistoria do 10M não concluída – Segunda 1º S',lida:false,ts:'Hoje 08:00'},
+    {id:2,tipo:'mat',titulo:'Material aguardado',sub:'REQ-045: Mangueira pneumática para Carrossel L2',lida:false,ts:'Hoje 07:30'},
+    {id:3,tipo:'done',titulo:'Corretiva concluída',sub:'Compressor C1 – rolamento substituído',lida:true,ts:'12/05 16:40'},
+  ],
+  showNotif:false,
+  nextId:300,
+  extraUsers:[],
+};
+
+async function loadStorage(){
+  try{
+    const r=await window.storage.get('manut_state');
+    if(r&&r.value){const p=JSON.parse(r.value);Object.assign(S,p);S.user=null;S.showNotif=false;}
+  }catch(e){}
+}
+async function saveStorage(){
+  try{await window.storage.set('manut_state',JSON.stringify(S));}catch(e){}
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function render(){
+  const app=document.getElementById('app');
+  const fab=document.getElementById('fab');
+  if(!S.user){app.innerHTML=renderLogin();fab.classList.add('hidden');return;}
+  app.innerHTML=`${renderHeader()}${renderNotifPanel()}<div class="content" id="content">${renderTab()}</div>`;
+  const showFab=S.tab==='preventivas'||S.tab==='corretivas';
+  fab.classList.toggle('hidden',!showFab);
+  fab.onclick=openNew;
+}
+
+function renderLogin(){
+  const allUsers=[...USERS.slice(0,-1),...S.extraUsers,USERS[USERS.length-1]];
+  const btns=allUsers.map(u=>{
+    if(u.id==='novo') return `<div class="or-divider">ou</div>
+      <div class="new-user-row">
+        <input class="inp" id="new-user-inp" placeholder="Nome do novo usuário" onkeydown="if(event.key==='Enter')addUser()">
+        <button class="btn btn-primary btn-sm" onclick="addUser()"><i class="ti ti-plus"></i></button>
+      </div>`;
+    return `<button class="user-btn" onclick="login('${u.id}')">
+      <div class="user-avatar" style="background:${u.color}20;color:${u.color}">${u.initials}</div>
+      <div class="user-info"><div class="name">${u.name}</div><div class="role">${u.role}</div></div>
+      <i class="ti ti-chevron-right" style="margin-left:auto;color:var(--text3);font-size:16px"></i>
+    </button>`;
+  }).join('');
+  return `<div class="login-screen">
+    <div class="login-logo">
+      <div class="icon-wrap">⚙️</div>
+      <h1>Manutenção GLP</h1>
+      <p>Sistema de gestão de carrosseis</p>
+    </div>
+    <div class="login-card">
+      <div class="login-title">Selecione seu usuário</div>
+      ${btns}
+    </div>
+  </div>`;
+}
+
+function login(id){
+  let u=USERS.find(x=>x.id===id)||S.extraUsers.find(x=>x.id===id);
+  S.user=u;render();
+}
+function addUser(){
+  const inp=document.getElementById('new-user-inp');
+  if(!inp||!inp.value.trim())return;
+  const name=inp.value.trim();
+  const colors=['#f472b6','#fb923c','#a78bfa','#22d3ee'];
+  const u={id:'u_'+Date.now(),name,role:'Técnico',color:colors[S.extraUsers.length%colors.length],initials:name.substring(0,2).toUpperCase()};
+  S.extraUsers.push(u);saveStorage();login(u.id);
+}
+
+function renderHeader(){
+  const unread=S.notificacoes.filter(n=>!n.lida).length;
+  const u=S.user;
+  const tabs=[
+    {id:'preventivas',icon:'ti-calendar-check',label:'Preventivas'},
+    {id:'corretivas',icon:'ti-tool',label:'Corretivas'},
+    {id:'indicadores',icon:'ti-chart-bar',label:'Indicadores'},
+    {id:'relatorios',icon:'ti-file-export',label:'Relatórios'},
+  ];
+  return `<div class="header">
+    <div class="hdr-top">
+      <div class="hdr-logo"><div class="dot"></div>Manutenção GLP</div>
+      <div class="hdr-user">
+        <div class="hdr-notif" onclick="toggleNotif()">
+          <i class="ti ti-bell" style="font-size:20px"></i>
+          ${unread?`<div class="notif-badge">${unread}</div>`:''}
+        </div>
+        <div class="hdr-avatar" style="background:${u.color}20;color:${u.color}" onclick="logout()">${u.initials}</div>
+      </div>
+    </div>
+    <nav class="nav">
+      ${tabs.map(t=>`<button class="nav-btn${S.tab===t.id?' active':''}" onclick="switchTab('${t.id}')">
+        <i class="ti ${t.icon}"></i>${t.label}
+      </button>`).join('')}
+    </nav>
+  </div>`;
+}
+
+function renderNotifPanel(){
+  return `<div class="notif-panel${S.showNotif?' open':''}" id="notif-panel">
+    <div class="notif-hdr">
+      <h2>Notificações</h2>
+      <button class="btn btn-ghost btn-sm" onclick="toggleNotif()"><i class="ti ti-x"></i></button>
+    </div>
+    <div style="overflow-y:auto;flex:1">
+      ${S.notificacoes.length?S.notificacoes.map(n=>{
+        const iconMap={alert:'ti-alert-triangle',mat:'ti-package',done:'ti-check-circle'};
+        const colMap={alert:'var(--amber)',mat:'var(--pink)',done:'var(--green)'};
+        return `<div class="notif-item${!n.lida?' notif-unread':''}" onclick="readNotif(${n.id})">
+          <div class="notif-icon" style="background:${colMap[n.tipo]}20;color:${colMap[n.tipo]}">
+            <i class="ti ${iconMap[n.tipo]||'ti-bell'}"></i>
+          </div>
+          <div class="notif-body"><div class="ttl">${n.titulo}</div><div class="sub">${n.sub}</div><div class="sub" style="margin-top:3px;font-size:10px">${n.ts}</div></div>
+        </div>`;
+      }).join(''):`<div class="empty"><i class="ti ti-bell-off"></i><p>Sem notificações</p></div>`}
+    </div>
+    <div style="padding:12px 16px">
+      <button class="btn btn-ghost btn-full" onclick="marcarTodasLidas()">Marcar todas como lidas</button>
+    </div>
+  </div>`;
+}
+
+function toggleNotif(){S.showNotif=!S.showNotif;render();}
+function readNotif(id){const n=S.notificacoes.find(x=>x.id===id);if(n)n.lida=true;saveStorage();render();}
+function marcarTodasLidas(){S.notificacoes.forEach(n=>n.lida=true);saveStorage();render();}
+function logout(){S.user=null;render();}
+function switchTab(t){S.tab=t;render();}
+
+function renderTab(){
+  if(S.tab==='preventivas')return renderPreventivas();
+  if(S.tab==='corretivas')return renderCorretivas();
+  if(S.tab==='indicadores')return renderIndicadores();
+  if(S.tab==='relatorios')return renderRelatorios();
+  return '';
+}
+
+function renderPreventivas(){
+  let h='';
+  const hoje=new Date();
+  const todayIdx=Math.min(hoje.getDay()-1,4);
+  DAYS.forEach((dia,idx)=>{
+    const tasks=S.preventivas.filter(p=>p.dia===dia);
+    const done=tasks.filter(t=>t.done).length;
+    const pct=tasks.length?Math.round(done/tasks.length*100):0;
+    const isToday=idx===todayIdx;
+    h+=`<div class="day-block">
+      <div class="day-hdr">
+        <span class="day-name${isToday?' day-today':''}">${dia}${isToday?' — Hoje':''}</span>
+        <span class="day-prog">${done}/${tasks.length}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div style="margin-top:8px">`;
+    tasks.forEach(t=>{
+      h+=`<div class="task-row" onclick="togglePrev(${t.id})">
+        <div class="chk${t.done?' done':''}">${t.done?'<i class="ti ti-check" style="font-size:11px"></i>':''}</div>
+        <div class="task-info">
+          <div class="task-name${t.done?' done':''}">${t.turno} — ${t.nome}</div>
+          ${t.obs?`<div class="task-sub"><i class="ti ti-notes" style="font-size:11px"></i> ${t.obs}</div>`:''}
+          ${t.doneBy?`<div class="task-sub"><i class="ti ti-user" style="font-size:11px"></i> ${t.doneBy} · ${t.doneAt}</div>`:''}
+        </div>
+        <button onclick="event.stopPropagation();editPrev(${t.id})" style="background:none;border:none;cursor:pointer;color:var(--text3);padding:4px;font-size:17px"><i class="ti ti-pencil"></i></button>
+      </div>`;
+    });
+    h+=`</div></div>`;
+  });
+  return h;
+}
+
+function renderCorretivas(){
+  const abertas=S.corretivas.filter(c=>c.status==='aberto');
+  const andamento=S.corretivas.filter(c=>c.status==='andamento');
+  const concluidas=S.corretivas.filter(c=>c.status==='concluido');
+  let h='';
+  if(abertas.length||andamento.length){
+    h+=`<p class="section-label">Em aberto / andamento</p>`;
+    [...abertas,...andamento].forEach(c=>{h+=cardCorr(c);});
+  }
+  if(concluidas.length){
+    h+=`<p class="section-label" style="margin-top:10px">Concluídas</p>`;
+    concluidas.forEach(c=>{h+=cardCorr(c);});
+  }
+  if(!S.corretivas.length) h=`<div class="empty"><i class="ti ti-check-circle"></i><p>Nenhuma corretiva registrada</p></div>`;
+  return h;
+}
+
+function cardCorr(c){
+  const smap={aberto:'b-open',andamento:'b-prog',concluido:'b-done'};
+  const slbl={aberto:'Em aberto',andamento:'Em andamento',concluido:'Concluída'};
+  return `<div class="card">
+    <div class="card-hdr">
+      <div class="card-title">${c.desc}</div>
+      <span class="badge ${smap[c.status]}">${slbl[c.status]}</span>
+    </div>
+    <div class="meta">
+      <span><i class="ti ti-settings"></i>${c.equip}</span>
+      <span><i class="ti ti-user"></i>${c.resp}</span>
+      <span><i class="ti ti-calendar"></i>${c.inicio}</span>
+      ${c.fim?`<span><i class="ti ti-flag-check"></i>${c.fim}</span>`:''}
+      ${c.reqNum?`<span><i class="ti ti-package"></i>${c.reqNum}</span>`:''}
+    </div>
+    ${c.mat?`<div class="mat-box"><i class="ti ti-alert-triangle" style="flex-shrink:0"></i><span><strong>Material faltando:</strong> ${c.mat}</span></div>`:''}
+    ${c.obs?`<div class="obs-box"><i class="ti ti-notes"></i> ${c.obs}</div>`:''}
+    <div class="btn-row">
+      ${c.status!=='concluido'?`<button class="btn btn-success btn-sm" onclick="concluirCorr(${c.id})"><i class="ti ti-check"></i>Concluir</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="editCorr(${c.id})"><i class="ti ti-pencil"></i>Editar</button>
+    </div>
+  </div>`;
+}
+
+function renderIndicadores(){
+  const total=S.corretivas.length;
+  const abertas=S.corretivas.filter(c=>c.status!=='concluido').length;
+  const concluidas=S.corretivas.filter(c=>c.status==='concluido').length;
+  const semMat=S.corretivas.filter(c=>c.mat).length;
+  const pTotal=S.preventivas.length;
+  const pDone=S.preventivas.filter(p=>p.done).length;
+  const pPct=pTotal?Math.round(pDone/pTotal*100):0;
+  const freq={};
+  S.corretivas.forEach(c=>{freq[c.equip]=(freq[c.equip]||0)+1;});
+  const sorted=Object.entries(freq).sort((a,b)=>b[1]-a[1]);
+  const maxF=sorted.length?sorted[0][1]:1;
+  const bars=sorted.map(([eq,n])=>{
+    const p=Math.round(n/maxF*100);
+    const cls=p>=80?'bf-high':p>=50?'bf-mid':'bf-low';
+    return `<div class="bar-row"><div class="bar-lbl" title="${eq}">${eq}</div>
+      <div class="bar-track"><div class="bar-fill ${cls}" style="width:${p}%">${n}</div></div>
+    </div>`;
+  }).join('');
+  const insightEq=sorted.length?sorted[0][0]:'—';
+  return `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-lbl"><i class="ti ti-tool"></i>Corretivas</div><div class="stat-num">${total}</div><div class="stat-sub">${abertas} em aberto</div></div>
+      <div class="stat-card"><div class="stat-lbl"><i class="ti ti-calendar-check"></i>Preventivas</div><div class="stat-num">${pPct}%</div><div class="stat-sub">${pDone}/${pTotal} feitas</div></div>
+      <div class="stat-card"><div class="stat-lbl"><i class="ti ti-check"></i>Concluídas</div><div class="stat-num">${concluidas}</div><div class="stat-sub">esta semana</div></div>
+      <div class="stat-card"><div class="stat-lbl"><i class="ti ti-package"></i>Sem material</div><div class="stat-num">${semMat}</div><div class="stat-sub">aguardando req.</div></div>
+    </div>
+    ${sorted.length?`<p class="section-label">Corretivas por equipamento</p>
+    <div class="card" style="margin-bottom:12px">${bars}</div>
+    <div class="insight"><div class="insight-ttl"><i class="ti ti-bulb"></i>Foco preventivo sugerido</div>
+    <div class="insight-txt"><strong>${insightEq}</strong> concentra o maior número de corretivas. Antecipe a preventiva desse equipamento para reduzir falhas.</div></div>`:''}
+  `;
+}
+
+function renderRelatorios(){
+  return `<p class="section-label">Exportar relatório</p>
+    <div class="card">
+      <div class="form-grp"><label class="form-lbl">Período</label>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm active" id="rp-hoje" onclick="selPer('hoje',this)">Hoje</button>
+          <button class="btn btn-ghost btn-sm" id="rp-semana" onclick="selPer('semana',this)">Semana</button>
+          <button class="btn btn-ghost btn-sm" id="rp-mes" onclick="selPer('mes',this)">Mês</button>
+        </div>
+      </div>
+    </div>
+    <div style="height:8px"></div>
+    <button class="rpt-btn green" onclick="gerarRpt('whatsapp')"><i class="ti ti-brand-whatsapp"></i>Enviar via WhatsApp</button>
+    <button class="rpt-btn blue" onclick="gerarRpt('copiar')"><i class="ti ti-copy"></i>Copiar resumo</button>
+    <button class="rpt-btn" onclick="gerarRpt('imprimir')"><i class="ti ti-printer"></i>Imprimir / PDF</button>
+    <div id="rpt-out"></div>`;
+}
+
+function selPer(p,btn){
+  document.querySelectorAll('[id^="rp-"]').forEach(b=>b.style.borderColor='');
+  if(btn) btn.style.borderColor='var(--blue)';
+}
+
+function gerarRpt(tipo){
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const pDone=S.preventivas.filter(p=>p.done).length;
+  const pPend=S.preventivas.filter(p=>!p.done).length;
+  const cAb=S.corretivas.filter(c=>c.status!=='concluido');
+  const cFin=S.corretivas.filter(c=>c.status==='concluido');
+  const semMat=S.corretivas.filter(c=>c.mat);
+  let txt=`*RELATÓRIO MANUTENÇÃO GLP*\n*Data: ${hoje}*\n\n`;
+  txt+=`*PREVENTIVAS*\n✅ Concluídas: ${pDone}\n⏳ Pendentes: ${pPend}\n\n`;
+  txt+=`*CORRETIVAS*\n🔧 Em aberto/andamento: ${cAb.length}\n✅ Concluídas: ${cFin.length}\n`;
+  if(semMat.length){txt+=`\n*⚠️ MATERIAIS NECESSÁRIOS*\n`;semMat.forEach(c=>{txt+=`• ${c.equip}: ${c.mat}${c.reqNum?' ('+c.reqNum+')':''}\n`;});}
+  if(cAb.length){txt+=`\n*🔧 CORRETIVAS EM ABERTO*\n`;cAb.forEach(c=>{txt+=`• ${c.equip}: ${c.desc} (desde ${c.inicio})\n`;});}
+  if(tipo==='whatsapp'){
+    const url='https://wa.me/?text='+encodeURIComponent(txt);
+    window.open(url,'_blank');
+  } else if(tipo==='copiar'){
+    if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast('Copiado para área de transferência!'));}
+    document.getElementById('rpt-out').innerHTML=`<div class="report-card">${txt.replace(/\*/g,'').replace(/</g,'&lt;')}</div>`;
+  } else {
+    const win=window.open('','_blank');
+    if(win){win.document.write(`<pre style="font-family:monospace;padding:20px;font-size:14px">${txt.replace(/\*/g,'')}</pre>`);win.print();}
+  }
+}
+
+function togglePrev(id){
+  const t=S.preventivas.find(p=>p.id===id);
+  if(!t)return;
+  t.done=!t.done;
+  if(t.done){t.doneBy=S.user.name;t.doneAt=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});}
+  else{t.doneBy='';t.doneAt='';}
+  saveStorage();render();
+  toast(t.done?'Preventiva concluída ✓':'Preventiva reaberta');
+}
+
+function editPrev(id){
+  const t=S.preventivas.find(p=>p.id===id);
+  if(!t)return;
+  showModal(`<div class="modal-ttl"><i class="ti ti-calendar-check"></i>Observação preventiva</div>
+    <div class="form-grp"><label class="form-lbl">Tarefa</label><div style="font-size:13px;color:var(--text2);padding:8px 0">${t.turno} — ${t.nome}</div></div>
+    <div class="form-grp"><label class="form-lbl">Observação</label><textarea class="form-ta" id="obs-inp">${t.obs||''}</textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="savePrevObs(${id})"><i class="ti ti-check"></i>Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    </div>`);
+}
+function savePrevObs(id){
+  const t=S.preventivas.find(p=>p.id===id);
+  const el=document.getElementById('obs-inp');
+  if(t&&el)t.obs=el.value;
+  saveStorage();closeModal();render();toast('Observação salva');
+}
+
+function editCorr(id){
+  const c=S.corretivas.find(x=>x.id===id);
+  if(!c)return;
+  showModal(`<div class="modal-ttl"><i class="ti ti-tool"></i>Editar corretiva</div>
+    <div class="form-grp"><label class="form-lbl">Status</label>
+      <select class="form-sel" id="e-status">
+        <option value="aberto"${c.status==='aberto'?' selected':''}>Em aberto</option>
+        <option value="andamento"${c.status==='andamento'?' selected':''}>Em andamento</option>
+        <option value="concluido"${c.status==='concluido'?' selected':''}>Concluída</option>
+      </select>
+    </div>
+    <div class="form-grp"><label class="form-lbl">Observação</label><textarea class="form-ta" id="e-obs">${c.obs||''}</textarea></div>
+    <div class="form-grp"><label class="form-lbl">Material faltando</label><input class="form-inp" id="e-mat" value="${c.mat||''}" placeholder="Ex: 2x mangueira pneumática 1/2&quot;"></div>
+    <div class="form-grp"><label class="form-lbl">Nº Requisição</label><input class="form-inp" id="e-req" value="${c.reqNum||''}" placeholder="Ex: REQ-046"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveCorr(${id})"><i class="ti ti-check"></i>Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    </div>`);
+}
+function saveCorr(id){
+  const c=S.corretivas.find(x=>x.id===id);
+  if(c){
+    c.status=document.getElementById('e-status')?.value||c.status;
+    c.obs=document.getElementById('e-obs')?.value||'';
+    c.mat=document.getElementById('e-mat')?.value||'';
+    c.reqNum=document.getElementById('e-req')?.value||'';
+    if(c.status==='concluido'&&!c.fim)c.fim=new Date().toLocaleDateString('pt-BR');
+  }
+  saveStorage();closeModal();render();toast('Corretiva atualizada');
+}
+function concluirCorr(id){
+  const c=S.corretivas.find(x=>x.id===id);
+  if(c){c.status='concluido';c.fim=new Date().toLocaleDateString('pt-BR');}
+  saveStorage();render();toast('Corretiva concluída ✓');
+}
+
+function openNew(){
+  if(S.tab==='preventivas'){
+    showModal(`<div class="modal-ttl"><i class="ti ti-calendar-plus"></i>Nova preventiva</div>
+      <div class="form-grp"><label class="form-lbl">Dia</label>
+        <select class="form-sel" id="n-dia">${DAYS.map(d=>`<option>${d}</option>`).join('')}</select>
+      </div>
+      <div class="form-grp"><label class="form-lbl">Turno</label>
+        <select class="form-sel" id="n-turno"><option>1º S</option><option>2º S</option><option>3º S</option><option>4º S</option></select>
+      </div>
+      <div class="form-grp"><label class="form-lbl">Descrição</label><input class="form-inp" id="n-nome" placeholder="Ex: Lubrificação dos rodeiros..."></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="addPrev()"><i class="ti ti-check"></i>Adicionar</button>
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      </div>`);
+  } else {
+    const hoje=new Date().toLocaleDateString('pt-BR');
+    showModal(`<div class="modal-ttl"><i class="ti ti-tool"></i>Novo chamado / corretiva</div>
+      <div class="form-grp"><label class="form-lbl">Equipamento</label><input class="form-inp" id="c-equip" placeholder="Ex: Carrossel Linha 1"></div>
+      <div class="form-grp"><label class="form-lbl">Descrição do problema</label><textarea class="form-ta" id="c-desc" placeholder="Descreva o chamado..."></textarea></div>
+      <div class="form-grp"><label class="form-lbl">Status</label>
+        <select class="form-sel" id="c-status">
+          <option value="aberto">Em aberto</option>
+          <option value="andamento">Em andamento</option>
+          <option value="concluido">Concluída</option>
+        </select>
+      </div>
+      <div class="form-grp"><label class="form-lbl">Material faltando (se houver)</label><input class="form-inp" id="c-mat" placeholder="Ex: mangueira pneumática 1/2&quot;"></div>
+      <div class="form-grp"><label class="form-lbl">Nº Requisição</label><input class="form-inp" id="c-req" placeholder="Ex: REQ-046"></div>
+      <div class="form-grp"><label class="form-lbl">Observação</label><textarea class="form-ta" id="c-obs" placeholder="Detalhes adicionais..."></textarea></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="addCorr()"><i class="ti ti-check"></i>Registrar</button>
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      </div>`);
+  }
+}
+function addPrev(){
+  const dia=document.getElementById('n-dia')?.value;
+  const turno=document.getElementById('n-turno')?.value;
+  const nome=document.getElementById('n-nome')?.value?.trim();
+  if(!nome)return;
+  S.preventivas.push({id:S.nextId++,dia,turno,nome,done:false,obs:'',doneBy:'',doneAt:''});
+  saveStorage();closeModal();render();toast('Preventiva adicionada');
+}
+function addCorr(){
+  const equip=document.getElementById('c-equip')?.value?.trim();
+  const desc=document.getElementById('c-desc')?.value?.trim();
+  if(!equip||!desc)return;
+  const status=document.getElementById('c-status')?.value;
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  S.corretivas.push({
+    id:S.nextId++,equip,desc,status,
+    inicio:hoje,fim:status==='concluido'?hoje:'',
+    obs:document.getElementById('c-obs')?.value||'',
+    mat:document.getElementById('c-mat')?.value||'',
+    reqNum:document.getElementById('c-req')?.value||'',
+    resp:S.user.name
+  });
+  if(status==='aberto'&&document.getElementById('c-mat')?.value){
+    S.notificacoes.unshift({id:S.nextId++,tipo:'mat',titulo:'Material necessário registrado',sub:`${equip}: ${document.getElementById('c-mat').value}`,lida:false,ts:'Agora'});
+  }
+  saveStorage();closeModal();render();toast('Corretiva registrada');
+}
+
+function showModal(inner){
+  document.getElementById('modal-root').innerHTML=`<div class="overlay" onclick="closeModal()"><div class="modal" onclick="event.stopPropagation()">${inner}</div></div>`;
+}
+function closeModal(){document.getElementById('modal-root').innerHTML='';}
+
+// PWA install
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+
+loadStorage().then(render);
+</script>
